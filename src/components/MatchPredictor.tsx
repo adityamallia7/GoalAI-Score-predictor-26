@@ -4,6 +4,7 @@ import { Swords, Activity, Flame, ShieldAlert, Award, Timer, BookOpen, AlertCirc
 import TeamSelect from './TeamSelect';
 import TeamFlag from './TeamFlag';
 import Markdown from 'react-markdown';
+import { simulateMatch } from '../utils/predictor';
 import remarkGfm from 'remark-gfm';
 
 interface MatchPredictorProps {
@@ -92,6 +93,50 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
       manual: isManual
     };
 
+    // Calculate prediction client-side instantly!
+    const clientPrediction = simulateMatch(config);
+    setPrediction(clientPrediction);
+
+    if (onPredictionSaved) {
+      // Find most likely exact score (modal scoreline) from prediction matrix
+      let maxP = -1;
+      let pA = 0;
+      let pB = 0;
+      for (let a = 0; a <= 8; a++) {
+        for (let b = 0; b <= 8; b++) {
+          const prob = clientPrediction.scoreMatrix[a]?.[b] || 0;
+          if (prob > maxP) {
+            maxP = prob;
+            pA = a;
+            pB = b;
+          }
+        }
+      }
+
+      let predOutcome: 'W' | 'D' | 'L' = 'D';
+      if (pA > pB) predOutcome = 'W';
+      else if (pA < pB) predOutcome = 'L';
+
+      const stored: StoredPrediction = {
+        id: Math.random().toString(36).substring(2, 9),
+        timestamp: new Date().toISOString(),
+        teamA: clientPrediction.teamA,
+        teamB: clientPrediction.teamB,
+        predScoreline: `${pA}-${pB}`, // Save modal scoreline
+        pHome: parseFloat((clientPrediction.probabilities.winA * 100).toFixed(1)),
+        pDraw: parseFloat((clientPrediction.probabilities.draw * 100).toFixed(1)),
+        pAway: parseFloat((clientPrediction.probabilities.winB * 100).toFixed(1)),
+        predictedOutcome: predOutcome, // from Team A perspective
+        actualScoreline: null,
+        resolved: false,
+        manual: isManual
+      };
+      onPredictionSaved(stored);
+    }
+
+    setLoading(false);
+
+    // Perform background API fetch for tactical analysis only, completely decoupled and try/caught
     try {
       const response = await fetch('/api/predict', {
         method: 'POST',
@@ -99,54 +144,32 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
         body: JSON.stringify(config)
       });
 
-      if (!response.ok) {
-        throw new Error('Simulation endpoint failed. Please try again.');
-      }
-
-      const data: MatchPredictionResult = await response.json();
-      setPrediction(data);
-
-      if (onPredictionSaved) {
-        // Find most likely exact score (modal scoreline) from prediction matrix
-        let maxP = -1;
-        let pA = 0;
-        let pB = 0;
-        for (let a = 0; a <= 8; a++) {
-          for (let b = 0; b <= 8; b++) {
-            const prob = data.scoreMatrix[a]?.[b] || 0;
-            if (prob > maxP) {
-              maxP = prob;
-              pA = a;
-              pB = b;
+      if (response.ok) {
+        const data = await response.json();
+        if (data.aiAnalysis) {
+          setPrediction(prev => {
+            if (prev) {
+              return { ...prev, aiAnalysis: data.aiAnalysis };
             }
-          }
+            return prev;
+          });
         }
-
-        let predOutcome: 'W' | 'D' | 'L' = 'D';
-        if (pA > pB) predOutcome = 'W';
-        else if (pA < pB) predOutcome = 'L';
-
-        const stored: StoredPrediction = {
-          id: Math.random().toString(36).substring(2, 9),
-          timestamp: new Date().toISOString(),
-          teamA: data.teamA,
-          teamB: data.teamB,
-          predScoreline: `${pA}-${pB}`, // Save modal scoreline
-          pHome: parseFloat((data.probabilities.winA * 100).toFixed(1)),
-          pDraw: parseFloat((data.probabilities.draw * 100).toFixed(1)),
-          pAway: parseFloat((data.probabilities.winB * 100).toFixed(1)),
-          predictedOutcome: predOutcome, // from Team A perspective
-          actualScoreline: null,
-          resolved: false,
-          manual: isManual
-        };
-        onPredictionSaved(stored);
+      } else {
+        setPrediction(prev => {
+          if (prev) {
+            return { ...prev, aiAnalysis: "Tactical analysis unavailable" };
+          }
+          return prev;
+        });
       }
-    } catch (err: any) {
-      console.error(err);
-      setErrorMessage(err.message || 'Error occurred while contacting simulation server.');
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.warn('Silent fallback triggered - server analysis unavailable:', err);
+      setPrediction(prev => {
+        if (prev) {
+          return { ...prev, aiAnalysis: "Tactical analysis unavailable" };
+        }
+        return prev;
+      });
     }
   };
 
@@ -909,12 +932,19 @@ if (a === 0 && b === 0) {
           {/* AI commentary editorial text */}
           {prediction.aiAnalysis && (
             <div className="bg-carbon-card border border-white/5 p-6 rounded-2xl space-y-4 stadium-border-glow animate-fade-in" id="ai-editorial">
-              <h4 className="text-[11px] font-mono uppercase tracking-widest text-white flex items-center gap-2 border-b border-white/5 pb-3 font-bold">
+              <h4 className="text-[11px] font-mono uppercase tracking-widest text-[#94A3B8] flex items-center gap-2 border-b border-white/5 pb-3 font-bold">
                 <BookOpen className="w-5 h-5 text-emerald-455 text-emerald-400" /> Match Analyst Report & Tactician Review
               </h4>
-              <div className="markdown-body p-1 leading-relaxed text-slate-300 font-sans prose prose-invert max-w-none text-xs sm:text-sm">
-                <Markdown remarkPlugins={[remarkGfm]}>{prediction.aiAnalysis}</Markdown>
-              </div>
+              {prediction.aiAnalysis === "Tactical analysis unavailable" ? (
+                <div className="flex items-center gap-3 text-slate-500 py-3 bg-zinc-950/40 px-4 rounded-xl border border-white/5">
+                  <AlertCircle className="w-5 h-5 text-[#94A3B8] flex-shrink-0" />
+                  <span className="text-xs font-mono tracking-tight text-slate-400">Tactical analysis report is currently offline. Deep local statistical simulation models loaded perfectly.</span>
+                </div>
+              ) : (
+                <div className="markdown-body p-1 leading-relaxed text-slate-300 font-sans prose prose-invert max-w-none text-xs sm:text-sm">
+                  <Markdown remarkPlugins={[remarkGfm]}>{prediction.aiAnalysis}</Markdown>
+                </div>
+              )}
             </div>
           )}
 
