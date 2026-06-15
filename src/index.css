@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-carbon-bg: #05070B;
+  --color-carbon-card: #0B0F19;
+  --color-carbon-border: #1E293B;
+  --color-accent-lime: #A3E635;
+  --color-accent-cyan: #06B6D4;
+}
+
+/* Infinitely scrolling sports marquee ticker class */
+@keyframes marquee {
+  0% {
+    transform: translateX(2%);
+  }
+  50% {
+    transform: translateX(-15%);
+  }
+  100% {
+    transform: translateX(2%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Entrance and transition animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Custom scrollbar to match sleek sports dashboard */
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(162, 230, 53, 0.5);
+}
+
+/* Styled Markdown Output from AI Editorial commentary */
+.markdown-body {
+  font-family: var(--font-sans);
+  color: #cbd5e1; /* slate-300 */
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-outfit);
+}
+
+.markdown-body h1 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  padding-bottom: 0.5rem;
+}
+
+.markdown-body h2 {
+  font-size: 1.25rem;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+  padding-bottom: 0.375rem;
+}
+
+.markdown-body h3 {
+  font-size: 1.1rem;
+}
+
+.markdown-body p {
+  margin-bottom: 1rem;
+  line-height: 1.625;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-body ul {
+  list-style-type: disc;
+}
+
+.markdown-body ol {
+  list-style-type: decimal;
+}
+
+.markdown-body li {
+  margin-bottom: 0.375rem;
+}
+
+.markdown-body strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.markdown-body italic {
+  font-style: italic;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.markdown-body thead {
+  background-color: rgba(15, 23, 42, 0.8);
+  border-bottom: 2px solid rgba(162, 230, 53, 0.4); /* lime bottom line */
+}
+
+.markdown-body th {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  text-align: left;
+  color: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.markdown-body tr {
+  border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+  transition: background-color 0.15s ease;
+}
+
+.markdown-body tr:hover {
+  background-color: rgba(51, 65, 85, 0.15);
+}
+
+.markdown-body tr:nth-child(even) {
+  background-color: rgba(30, 41, 59, 0.25);
+}
+
+.markdown-body td {
+  padding: 0.75rem 1rem;
+  color: #e2e8f0; /* slate-200 */
+}
+
+.markdown-body blockquote {
+  border-left: 4px solid #A3E635; /* lime-500 */
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  color: #94a3b8; /* slate-400 */
+  font-style: italic;
+  background-color: rgba(162, 230, 53, 0.02);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+/* ==========================================
+   CARBON STADIUM CORE THEME IMPLEMENTATION
+   ========================================== */
+
+/* Premium carbon fiber pattern with lime stadium overhead lighting */
+.bg-stadium-carbon {
+  background-color: #05070B;
+  background-image: 
+    radial-gradient(circle at 50% -20%, rgba(163, 230, 53, 0.08) 0%, transparent 60%),
+    linear-gradient(45deg, #090c13 25%, transparent 25%), 
+    linear-gradient(-45deg, #090c13 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #090c13 75%), 
+    linear-gradient(-45deg, transparent 75%, #090c13 75%);
+  background-size: 100% 100%, 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+}
+
+/* Premium Carbon Composite Dashboard Card style */
+.bg-carbon-card {
+  background: #0B0F19;
+  border: 1px solid #1E293B;
+  box-shadow: 
+    0 10px 30px -10px rgba(0, 0, 0, 0.8);
+}
+
+/* Special premium active stadium lighting glow */
+.stadium-border-glow {
+  border-color: rgba(163, 230, 53, 0.25);
+  box-shadow: 0 0 20px -3px rgba(163, 230, 53, 0.08);
+}
+
+.stadium-border-glow-intense {
+  border-color: rgba(163, 230, 53, 0.4);
+  box-shadow: 0 0 35px -5px rgba(163, 230, 53, 0.15);
+}
+
+/* Sport Dashboard Hazard Stripe Detail (often used in race counters & stadium telemetry Rails) */
+.carbon-hazard-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(163, 230, 53, 0.15),
+    rgba(163, 230, 53, 0.15) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* Bold racing numbers shadow text */
+.text-glow-lime {
+  text-shadow: 0 0 12px rgba(163, 230, 53, 0.4);
+}
+
+/* Pulse indicator representing live AI stadium computer simulation */
+.stadium-pulse {
+  box-shadow: 0 0 0 0 rgba(163, 230, 53, 0.5);
+  animation: stadiumPulse 2s infinite;
+}
+
+@keyframes stadiumPulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(163, 230, 53, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(163, 230, 53, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(163, 230, 53, 0);
+  }
+}
+
