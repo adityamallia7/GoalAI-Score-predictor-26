@@ -135,42 +135,6 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
     }
 
     setLoading(false);
-
-    // Perform background API fetch for tactical analysis only, completely decoupled and try/caught
-    try {
-      const response = await fetch('/api/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config)
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.aiAnalysis) {
-          setPrediction(prev => {
-            if (prev) {
-              return { ...prev, aiAnalysis: data.aiAnalysis };
-            }
-            return prev;
-          });
-        }
-      } else {
-        setPrediction(prev => {
-          if (prev) {
-            return { ...prev, aiAnalysis: "Tactical analysis unavailable" };
-          }
-          return prev;
-        });
-      }
-    } catch (err) {
-      console.warn('Silent fallback triggered - server analysis unavailable:', err);
-      setPrediction(prev => {
-        if (prev) {
-          return { ...prev, aiAnalysis: "Tactical analysis unavailable" };
-        }
-        return prev;
-      });
-    }
   };
 
   const getComparisonWidths = (valA: number, valB: number) => {
