@@ -5,7 +5,7 @@ likely scoreline for any matchup using a Poisson goals model, simulates the full
 48-team tournament 10,000 times via Monte Carlo to estimate title odds, and
 grades its own predictions against real results using the Brier score.
 
-**Live demo:** [add your Vercel link here]
+**Live demo:** https://goal-ai-score-predictor-26.vercel.app/
 
 ## Features
 - **Predictor** — Poisson-distribution scoreline forecasts with win/draw/loss
