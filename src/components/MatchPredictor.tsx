@@ -102,9 +102,11 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
       let maxP = -1;
       let pA = 0;
       let pB = 0;
+      const allSavedScorelines: { score: string; prob: number }[] = [];
       for (let a = 0; a <= 8; a++) {
         for (let b = 0; b <= 8; b++) {
           const prob = clientPrediction.scoreMatrix[a]?.[b] || 0;
+          allSavedScorelines.push({ score: `${a}-${b}`, prob });
           if (prob > maxP) {
             maxP = prob;
             pA = a;
@@ -112,6 +114,11 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
           }
         }
       }
+
+      const top3List = [...allSavedScorelines]
+        .sort((x, y) => y.prob - x.prob)
+        .slice(0, 3)
+        .map(sl => sl.score);
 
       let predOutcome: 'W' | 'D' | 'L' = 'D';
       if (pA > pB) predOutcome = 'W';
@@ -129,7 +136,8 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
         predictedOutcome: predOutcome, // from Team A perspective
         actualScoreline: null,
         resolved: false,
-        manual: isManual
+        manual: isManual,
+        top3Scores: top3List
       };
       onPredictionSaved(stored);
     }
@@ -501,6 +509,9 @@ export default function MatchPredictor({ teams, onPredictionSaved }: MatchPredic
 
                 {/* Footnote disclaimer */}
                 <p className="mt-4 text-[12px] text-[#94A3B8] font-normal relative z-10 block">
+                  Central estimate from expected goals. The single most likely exact scoreline is shown below.
+                </p>
+                <p className="mt-2 text-[12px] text-[#94A3B8] font-normal relative z-10 block">
                   This is the most statistically likely score, not a guarantee — real match results often differ.
                 </p>
               </div>

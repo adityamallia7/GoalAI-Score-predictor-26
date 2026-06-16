@@ -159,5 +159,6 @@ export interface StoredPrediction {
   actualOutcome?: 'W' | 'D' | 'L' | null;
   resolved: boolean;
   manual?: boolean;
+  top3Scores?: string[];
 }
 

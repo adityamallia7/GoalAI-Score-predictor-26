@@ -49,13 +49,31 @@ export default function PredictionHistory({
       return { label: 'Awaiting Result', style: 'text-slate-400 bg-slate-800 border-slate-700/50' };
     }
 
-    const isExact = pred.predScoreline === pred.actualScoreline;
+    const actual = pred.actualScoreline.trim();
+
+    // If top3Scores list exists, check proximity ranking
+    if (pred.top3Scores && pred.top3Scores.length >= 3) {
+      if (actual === pred.top3Scores[0]) {
+        return { label: 'Exact Hit 🎯', style: 'text-emerald-305 bg-emerald-500/25 border-emerald-500/30 font-bold' };
+      } else if (actual === pred.top3Scores[1]) {
+        return { label: 'Close — 2nd most likely', style: 'text-cyan-300 bg-cyan-500/20 border-cyan-500/30' };
+      } else if (actual === pred.top3Scores[2]) {
+        return { label: 'Close — 3rd most likely', style: 'text-indigo-300 bg-indigo-550/20 border-indigo-500/30' };
+      } else if (pred.predictedOutcome === pred.actualOutcome) {
+        return { label: 'Outcome Correct ✓', style: 'text-sky-305 bg-sky-505/20 border-sky-500/30' };
+      } else {
+        return { label: 'Incorrect ✗', style: 'text-red-400 bg-red-500/10 border-red-500/20' };
+      }
+    }
+
+    // Fallback for older saved history logs
+    const isExact = pred.predScoreline === actual;
     const isOutcomeCorrect = pred.predictedOutcome === pred.actualOutcome;
 
     if (isExact) {
-      return { label: 'Exact Score Hit 🎯', style: 'text-emerald-300 bg-emerald-500/25 border-emerald-500/30 font-bold' };
+      return { label: 'Exact Hit 🎯', style: 'text-emerald-305 bg-emerald-500/25 border-emerald-500/30 font-bold' };
     } else if (isOutcomeCorrect) {
-      return { label: 'Outcome Correct ✓', style: 'text-sky-300 bg-sky-500/20 border-sky-500/30' };
+      return { label: 'Outcome Correct ✓', style: 'text-sky-305 bg-sky-505/20 border-sky-500/30' };
     } else {
       return { label: 'Incorrect ✗', style: 'text-red-400 bg-red-500/10 border-red-500/20' };
     }
