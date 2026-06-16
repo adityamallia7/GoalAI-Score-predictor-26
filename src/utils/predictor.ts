@@ -629,7 +629,7 @@ export function generateDynamicCommentary(prediction: MatchPredictionResult, con
   if (isDraw) {
     verdictScoreline = `A hard-fought **${scoreA}-${scoreB}** draw was a fair reflection of their absolute tactical equilibrium, although ${prediction.penaltiesWinner ? `the penalty shootout crowned **${prediction.penaltiesWinner === prediction.teamA.code ? teamAName : teamBName}** as the aggregate victor` : 'neither could claim full dominance'}.`;
   } else {
-    verdictScoreline = `Ultimately, **${winner}** took a clinical **${scoreA}-${scoreB}** victory over **${loser}**${pensLog}, sealing a precious result in their FIFA World Cup trajectory.`;
+    verdictScoreline = `Ultimately, **${winner}** took a clinical **${scoreA}-${scoreB}** victory over **${loser}**${pensLog}, sealing a precious result in their World Cup trajectory.`;
   }
 
   const pHome = prediction.probabilities?.winA ?? 0.33;

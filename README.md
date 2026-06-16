@@ -1,41 +1,20 @@
-# GoalAI — World Cup 2026 Predictor
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-A statistical football predictor for the 2026 World Cup. It forecasts the most
-likely scoreline for any matchup using a Poisson goals model, simulates the full
-48-team tournament 10,000 times via Monte Carlo to estimate title odds, and
-grades its own predictions against real results using the Brier score.
+# Run and deploy your AI Studio app
 
-**Live demo:** https://goal-ai-score-predictor-26.vercel.app/
+This contains everything you need to run your app locally.
 
-## Features
-- **Predictor** — Poisson-distribution scoreline forecasts with win/draw/loss
-  probabilities and the full score matrix.
-- **Tournament** — 10,000-run Monte Carlo simulation for qualification and
-  championship odds, plus a single-run sandbox mode.
-- **History** — prediction log with Brier-score accuracy tracking that
-  auto-resolves against real match results.
-- **Explorer** — head-to-head records and World Cup championship history.
+View your app in AI Studio: https://ai.studio/apps/608248ac-690a-4390-b62f-581455326eb5
 
-## How the model works
-Each match is modeled as two independent Poisson processes over expected goals,
-derived from team attack/defense ratings. The score-probability matrix gives the
-most likely scoreline and outcome probabilities. The tournament simulator samples
-random scorelines from this distribution and repeats the full bracket 10,000 times,
-reporting probabilities rather than a single result.
+## Run Locally
 
-## Tech stack
-React · TypeScript · Vite · Tailwind CSS
+**Prerequisites:**  Node.js
 
-## Run locally
-```bash
-npm install
-npm run dev
-```
 
-## Limitations
-Team ratings are approximated from public FIFA rankings, not trained on historical
-match data — predictions are directional, not precise. Built as a learning project.
-
----
-*Not affiliated with, endorsed by, or connected to FIFA. For entertainment only —
-not betting advice.*
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

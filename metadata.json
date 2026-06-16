@@ -1,6 +1,6 @@
 {
-  "name": "FIFA World Cup Predictor",
-  "description": "An advanced score predictor and tournament simulator for the FIFA World Cup, utilizing historical match statistics, squad attributes, and Gemini-powered machine learning simulation.",
+  "name": "World Cup 2026 Predictor",
+  "description": "An advanced score predictor and tournament simulator for the World Cup, utilizing historical match statistics, squad attributes, and automated machine learning simulation.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -194,7 +194,7 @@ export default function App() {
             Current Count: <span className="text-[#A3E635] font-bold">{TEAMS.length}</span> teams built.
           </div>
           <p className="text-[11px] text-slate-500">
-            Please verify the configured TS array conforms to the FIFA World Cup 2026 specifications.
+            Please verify the configured TS array conforms to the World Cup 2026 specifications.
           </p>
         </div>
       </div>

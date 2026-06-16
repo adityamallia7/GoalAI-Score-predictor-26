@@ -936,7 +936,7 @@ export default function TournamentSimulator({ teams }: { teams: Team[] }) {
             <Trophy className="w-5 h-5 text-emerald-400" />
           </div>
           <div>
-            <h3 className="font-sans font-extrabold text-slate-100 text-base">FIFA World Cup Simulator</h3>
+            <h3 className="font-sans font-extrabold text-slate-100 text-base">World Cup 2026 Simulator</h3>
             <p className="text-[10px] font-mono text-slate-400 mt-0.5">Explore full campaign dynamics mathematically or play a sandbox single bracket.</p>
           </div>
         </div>
@@ -1333,7 +1333,7 @@ export default function TournamentSimulator({ teams }: { teams: Team[] }) {
                 <div className="bg-gradient-to-r from-yellow-600/10 via-yellow-500/20 to-yellow-600/10 border border-yellow-500/40 p-6 rounded-2xl text-center space-y-3 max-w-xl mx-auto shadow-xl">
                   <Trophy className="w-12 h-12 text-yellow-400 mx-auto animate-bounce" />
                   <div className="space-y-1.5">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-yellow-500 font-bold block">FIFA World Cup Sandbox Champion</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-yellow-500 font-bold block">World Cup 2026 Sandbox Champion</span>
                     <div className="flex justify-center select-none py-1">
                       <TeamFlag name={champion.name} height={28} className="rounded border border-white/10" />
                     </div>
